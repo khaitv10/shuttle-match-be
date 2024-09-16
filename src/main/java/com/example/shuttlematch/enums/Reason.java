@@ -1,2 +1,7 @@
-package com.example.shuttlematch.enums;public enum Reason {
+package com.example.shuttlematch.enums;
+
+import lombok.Getter;
+
+@Getter
+public enum Reason {
 }

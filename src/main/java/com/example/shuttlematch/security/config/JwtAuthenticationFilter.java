@@ -1,7 +1,7 @@
-package com.example.ticketsystem.security.config;
+package com.example.shuttlematch.security.config;
 
-import com.example.ticketsystem.security.jwt.JwtUtilities;
-import com.example.ticketsystem.service.impl.CustomerUserDetailsService;
+import com.example.shuttlematch.security.CustomerUserDetailsService;
+import com.example.shuttlematch.security.jwt.JwtUtilities;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,2 +1,9 @@
-package com.example.shuttlematch.enums;public enum TransactionType {
+package com.example.shuttlematch.enums;
+
+import lombok.Getter;
+
+@Getter
+public enum TransactionType {
+    MEMBERSHIP,
+    LIKE
 }
