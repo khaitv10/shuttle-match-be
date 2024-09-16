@@ -1,4 +1,4 @@
-package com.example.ticketsystem.security.bussiness.dto;
+package com.example.shuttlematch.security.bussiness.dto;
 
 
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.example.ticketsystem.security.config;
+package com.example.shuttlematch.security.config;
 
-import com.example.ticketsystem.service.impl.CustomerUserDetailsService;
+import com.example.shuttlematch.security.CustomerUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,9 +42,6 @@ public class SpringSecurityConfig {
                         "/user/*/register",
                         "/user/*/login",
                         "user/*/checkOtp/register",
-                            "/film/**",
-                            "/file/**",
-                            "/voucher/**",
                             "/transaction/v1/vnpayCallback"
                     ).permitAll()
                     .requestMatchers("/admin/**",

@@ -1,4 +1,4 @@
-package com.example.ticketsystem.security.jwt;
+package com.example.shuttlematch.security.jwt;
 
 
 import io.jsonwebtoken.*;

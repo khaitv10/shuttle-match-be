@@ -1,8 +1,8 @@
-package com.example.ticketsystem.service.impl;
+package com.example.shuttlematch.security;
 
 
-import com.example.ticketsystem.entity.User;
-import com.example.ticketsystem.repository.IUserRepository;
+import com.example.shuttlematch.entity.User;
+import com.example.shuttlematch.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomerUserDetailsService implements UserDetailsService {
 
-    private final IUserRepository iUserRepository ;
+    private final UserRepository userRepository ;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = iUserRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found !"));
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found !"));
         return  user ;
 
     }
