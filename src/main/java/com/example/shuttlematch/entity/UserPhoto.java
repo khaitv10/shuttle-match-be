@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "user_photo")
+@Table(name = "user_photos")
 @Accessors(chain=true)
 public class UserPhoto {
     @Id

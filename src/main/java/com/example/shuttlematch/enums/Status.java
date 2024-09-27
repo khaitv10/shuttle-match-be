@@ -6,5 +6,6 @@ import lombok.Getter;
 public enum Status {
 
     ACTIVE,
+    INACTIVE,
     BANNED
 }

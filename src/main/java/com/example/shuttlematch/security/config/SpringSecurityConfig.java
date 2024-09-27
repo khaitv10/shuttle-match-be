@@ -41,14 +41,19 @@ public class SpringSecurityConfig {
                         "/h2-console/**",
                         "/user/*/register",
                         "/user/*/login",
+                        "/user/*/login",
+                        "/user/*/login-google",
                         "user/*/checkOtp/register",
+                            "/film/**",
+                            "/file/**",
+                            "/voucher/**",
                             "/transaction/v1/vnpayCallback"
                     ).permitAll()
-                    .requestMatchers("/admin/**",
-                            "/film/*/delete/**",
-                            "/voucher/*/delete/**"
-                    ).hasAuthority("ADMIN")
-                    .requestMatchers("/superadmin/**").hasAuthority("SUPERADMIN")
+//                    .requestMatchers("/admin/**",
+//                            "/film/*/delete/**",
+//                            "/voucher/*/delete/**"
+//                    ).hasAuthority("ADMIN")
+//                    .requestMatchers("/superadmin/**").hasAuthority("SUPERADMIN")
                     .anyRequest().authenticated()
             );
 

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "match")
+@Table(name = "matches")
 @Accessors(chain=true)
 public class Match {
     @Id
