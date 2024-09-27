@@ -27,7 +27,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 @Accessors(chain=true)
 public class User implements Serializable , UserDetails {
     @Id
@@ -43,7 +43,7 @@ public class User implements Serializable , UserDetails {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String phone;
 
     @Column(nullable = false, unique = true)
@@ -55,6 +55,8 @@ public class User implements Serializable , UserDetails {
 
     private String gender;
 
+    private String otp;
+
     @Enumerated(EnumType.STRING)
     private Level level;
 
@@ -64,11 +66,11 @@ public class User implements Serializable , UserDetails {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "available_time")
+    @CollectionTable(name = "available_time", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "available_time")
     private Set<Time> availableTime;
 
-    @Column(name = "diamond_Member", nullable = false)
+    @Column(name = "diamond_member", nullable = false)
     private boolean diamondMember;
 
     @Column(name = "like_remaining")
@@ -80,29 +82,31 @@ public class User implements Serializable , UserDetails {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @ElementCollection(targetClass=Role.class,fetch = FetchType.EAGER)  //  specify where JPA can find information about the Enum.
+    @Enumerated(EnumType.STRING) // Possibly optional (I'm not sure) but defaults to ORDINAL.
+    @CollectionTable(name="role_user") // create the table that hold relationship from Person to InterestsEnum
+    @Column(name="roles") // Column name in person_interest
+    private Set<Role> role ;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<UserPhoto> userPhotos;
 
-    public User (String email , String password , Role role) {
+    public User (String email , String password , Set<Role> role) {
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        this.role.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.name())));
         return authorities;
     }
 
@@ -130,4 +134,6 @@ public class User implements Serializable , UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "swipe")
+@Table(name = "swipes")
 @Accessors(chain=true)
 public class Swipe {
     @Id

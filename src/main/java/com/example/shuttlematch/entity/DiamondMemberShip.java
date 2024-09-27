@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "diamond_member")
+@Table(name = "diamond_members")
 public class DiamondMemberShip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
