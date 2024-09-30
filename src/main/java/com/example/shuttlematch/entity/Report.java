@@ -27,9 +27,10 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "reported_user", referencedColumnName = "id")
-    private User reported_User;
+    private User reportedUser;
 
     @Column(name = "reason")
+    @Enumerated(EnumType.STRING)
     private Reason reason;
 
     @Column(name = "report_time")

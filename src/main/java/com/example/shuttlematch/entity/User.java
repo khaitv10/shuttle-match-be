@@ -16,10 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -95,7 +92,7 @@ public class User implements Serializable , UserDetails {
     private Set<Role> role ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserPhoto> userPhotos;
+    private Set<UserPhoto> userPhotos = new HashSet<>();
 
     public User (String email , String password , Set<Role> role) {
         this.email = email;

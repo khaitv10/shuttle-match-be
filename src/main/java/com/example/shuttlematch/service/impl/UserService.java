@@ -85,7 +85,7 @@ public class UserService implements IUserService {
                 user.setPhone(request.getPhone());
                 user.setFullName(request.getName());
                 user.setDob(request.getDob());
-                user.setGender(request.getGender());
+                user.setGender(request.getGender().toUpperCase());
                 user.setOccupation(request.getOccupation());
                 user.setLevel(request.getLevel());
                 user.setDescription(request.getDescription());
