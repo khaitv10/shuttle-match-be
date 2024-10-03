@@ -27,6 +27,7 @@ public enum ResponseCode {
     DATETIME_INVALID(101001,"Date time format invalid"),
     USER_PHOTO_COUNT_INVALID(101002,"User photo number from 2 to 6"),
     REQUIRED_FIELDS_MISSING(101003,"Required fields missing"),
+    AGE_NEED_OVER_16(101004,"Your age need over 16"),
 
 
 

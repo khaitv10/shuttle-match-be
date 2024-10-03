@@ -29,9 +29,11 @@ public class Swipe {
     private User toUser;
 
     @Column(name = "swipe_type")
+    @Enumerated(EnumType.STRING)
     private SwipeType swipeType;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "swipe_time")

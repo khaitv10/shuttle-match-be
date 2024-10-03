@@ -5,6 +5,7 @@ import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
+import com.example.shuttlematch.payload.response.UserSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @Tag(name = "User controller")
@@ -58,10 +60,10 @@ public interface IUserController {
 
 
     @Operation(
-        summary = "Get Information"
+        summary = "Get User Information"
     )
-    @GetMapping("/v1/getInfo")
-    ResponseEntity<ApiResponse<UserResponse>> getInfo(Principal principal);
+    @GetMapping("/v1/getUserInfo")
+    ResponseEntity<ApiResponse<UserResponse>> getUserInfo(Principal principal);
 
 
 
@@ -71,11 +73,17 @@ public interface IUserController {
     @PutMapping("/v1/update")
     ResponseEntity<ApiResponse<UserResponse>> updateUser(Principal principal, @RequestBody UserUpdateRequest request);
 
-//
-//    @Operation(
-//            summary = "Get list all user"
-//    )
-//    @GetMapping("/v1/all")
-//    ResponseEntity<ApiResponse<PageDataResponse<UserSummaryResponse>>> getPageAll(Principal principal,
-//                                                     @ParameterObject UserGetPageRequest request);
+
+
+    @Operation(
+            summary = "Get all"
+    )
+    @GetMapping("/v1/getAll")
+    ResponseEntity<ApiResponse<List<UserSummaryResponse>>> getAll(Principal principal);
+
+    @Operation(
+            summary = "Get Information"
+    )
+    @GetMapping("/v1/getInfo/{id}")
+    ResponseEntity<ApiResponse<UserResponse>> getInfo(Long id);
 }

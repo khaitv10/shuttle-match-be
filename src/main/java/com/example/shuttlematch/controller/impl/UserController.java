@@ -6,6 +6,7 @@ import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
+import com.example.shuttlematch.payload.response.UserSummaryResponse;
 import com.example.shuttlematch.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -65,9 +67,9 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<UserResponse>> getInfo(Principal principal) {
+    public ResponseEntity<ApiResponse<UserResponse>> getUserInfo(Principal principal) {
         log.info("has a request to get info: {}", principal.getName());
-        ApiResponse<UserResponse> info = userService.getInfo(principal.getName());
+        ApiResponse<UserResponse> info = userService.getUserInfo(principal.getName());
         return new ResponseEntity<>(info, HttpStatus.OK);
     }
 
@@ -78,11 +80,18 @@ public class UserController implements IUserController {
         ApiResponse<UserResponse> userResponse = userService.updateUserInfo(request);
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
-//
-//    @Override
-//    public ResponseEntity<ApiResponse<PageDataResponse<UserSummaryResponse>>> getPageAll(Principal principal, UserGetPageRequest request) {
-//        log.info("has a request with data: {}", request.toString());
-//        PageDataResponse<UserSummaryResponse> userSummaryResponse = userService.getAllPage(request);
-//        return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS,userSummaryResponse),HttpStatus.OK);
-//    }
+
+    @Override
+    public ResponseEntity<ApiResponse<List<UserSummaryResponse>>> getAll(Principal principal) {
+        log.info("has a request to get all: {}", principal.getName());
+        ApiResponse<List<UserSummaryResponse>> listResponse = userService.getAll(principal.getName());
+        return new ResponseEntity<>(listResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<UserResponse>> getInfo(Long id) {
+        log.info("has a request to get info with id: {}", id.toString());
+        ApiResponse<UserResponse> response = userService.getInfo(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
