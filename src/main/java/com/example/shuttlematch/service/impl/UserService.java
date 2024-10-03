@@ -11,6 +11,7 @@ import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
+import com.example.shuttlematch.payload.response.UserSummaryResponse;
 import com.example.shuttlematch.repository.UserPhotoRepository;
 import com.example.shuttlematch.repository.UserRepository;
 import com.example.shuttlematch.security.jwt.JwtUtilities;
@@ -39,7 +40,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.*;
 
 
@@ -70,7 +73,7 @@ public class UserService implements IUserService {
     public ResponseEntity<ApiResponse<UserResponse>> register(UserRegisterRequest request) {
         try {
             Set<String> photos = request.getPhoto();
-            if (photos.isEmpty() || photos.size() > 6) {
+            if (photos.isEmpty() || photos.size() > 6 || photos.size() < 2) {
                 throw new BusinessException(ResponseCode.USER_PHOTO_COUNT_INVALID);
             }
 
@@ -78,6 +81,8 @@ public class UserService implements IUserService {
                 throw new BusinessException(ResponseCode.USER_EMAIL_EXISTED);
             } else if (userRepository.existsByPhone(request.getPhone())) {
                 throw new BusinessException(ResponseCode.USER_PHONE_EXISTED);
+            } else if (Period.between(request.getDob(), LocalDate.now()).getYears() < 16) {
+                throw new BusinessException(ResponseCode.AGE_NEED_OVER_16);
             } else {
                 User user = new User();
                 user.setEmail(request.getEmail());
@@ -248,7 +253,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public ApiResponse<UserResponse> getInfo(String email) {
+    public ApiResponse<UserResponse> getUserInfo(String email) {
         try {
             User user = userRepository.findByEmail(email).orElseThrow(
                 () -> {
@@ -321,8 +326,12 @@ public class UserService implements IUserService {
                 }
 
                 Set<String> photos = request.getPhoto();
-                if (photos.isEmpty() || photos.size() > 6) {
+                if (photos.isEmpty() || photos.size() > 6 || photos.size() < 2) {
                     throw new BusinessException(ResponseCode.USER_PHOTO_COUNT_INVALID);
+                }
+
+                if (Period.between(request.getDob(), LocalDate.now()).getYears() < 16) {
+                    throw new BusinessException(ResponseCode.AGE_NEED_OVER_16);
                 }
 
                 user.setPhone(request.getPhone());
@@ -385,27 +394,41 @@ public class UserService implements IUserService {
         }
     }
 
-//    @Override
-//    public PageDataResponse<UserSummaryResponse> getAllPage(UserGetPageRequest request) {
-//        try {
-//            Page<User> userPage = iUserRepository.findAll(request,request.getPageable());
-//            return new PageDataResponse<UserSummaryResponse>()
-//                    .setPage(userPage.getNumber())
-//                    .setSize(userPage.getSize())
-//                    .setTotalPage(userPage.getTotalPages())
-//                    .setTotalSize(userPage.getTotalElements())
-//                    .setItems(userPage.stream().map(UserSummaryResponse::new).collect(Collectors.toList()));
-//        } catch (BusinessException e) {
-//            throw e;
-//        } catch (Exception e) {
-//            log.error("Have error : {}", e.getLocalizedMessage());
-//            throw new BusinessException(ResponseCode.FAILED);
-//        }
-//    }
 
+    @Override
+    public ApiResponse<List<UserSummaryResponse>> getAll(String email) {
+        try {
+            User currentUser = userRepository.findByEmail(getEmailRequest()).orElseThrow(
+                    () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+            );
+            String currentEmail = currentUser.getEmail();
+            List<User> userList = userRepository.findAll();
 
+            //random user
+            Collections.shuffle(userList);
 
+            List<UserSummaryResponse> filteredUsers = userList.stream()
+                    .filter(user -> !user.getEmail().equals(currentEmail))
+                    .map(UserSummaryResponse::new)
+                    .toList();
 
+            return new ApiResponse<>(ResponseCode.SUCCESS, filteredUsers);
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.FAILED);
+        }
+    }
 
+    @Override
+    public ApiResponse<UserResponse> getInfo(long id) {
+        try {
+            User user = userRepository.findById(id).orElseThrow(
+                    () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+            );
+
+            return new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user));
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.FAILED);
+        }
+    }
 }
 

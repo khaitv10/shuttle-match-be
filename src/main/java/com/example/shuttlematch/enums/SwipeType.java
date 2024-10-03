@@ -5,5 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SwipeType {
     LIKE,
-    PASS
+    PASS,
+    LOVE,
+    RETURN
 }
