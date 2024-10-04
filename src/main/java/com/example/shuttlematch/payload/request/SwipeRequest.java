@@ -1,5 +1,6 @@
 package com.example.shuttlematch.payload.request;
 
+import com.example.shuttlematch.enums.SwipeType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class SwipeRequest {
     private long toUserId;
-    private String swipeType;
+    private SwipeType swipeType;
 }
