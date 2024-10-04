@@ -10,6 +10,7 @@ import com.example.shuttlematch.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +27,8 @@ public class SwipeController implements ISwipeController {
 
     @Override
     public ResponseEntity<ApiResponse<String>> swipe(SwipeRequest request, Principal principal) {
-        //log.info("Has a request to swipe: {}", request.toString());
-        //ResponseEntity<ApiResponse<UserResponse>> userResponseApiResponse = userService.register(request);
-        return null;
+        log.info("Has a request to swipe: {}", request.toString());
+        ApiResponse<String> swipeResponse = swipeService.swipe(request, principal.getName());
+        return new ResponseEntity<>(swipeResponse, HttpStatus.OK);
     }
 }
