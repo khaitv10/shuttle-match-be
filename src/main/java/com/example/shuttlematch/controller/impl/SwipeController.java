@@ -23,6 +23,7 @@ public class SwipeController implements ISwipeController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
     private ISwipeService swipeService;
 
     @Override
