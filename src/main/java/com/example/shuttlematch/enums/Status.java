@@ -7,5 +7,9 @@ public enum Status {
 
     ACTIVE,
     INACTIVE,
-    BANNED
+    BANNED,
+
+    PENDING,
+    MATCHED
+    
 }
