@@ -1,6 +1,6 @@
 package com.example.shuttlematch.security.config;
 
-import com.example.shuttlematch.security.CustomerUserDetailsService;
+import com.example.shuttlematch.service.impl.CustomerUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
