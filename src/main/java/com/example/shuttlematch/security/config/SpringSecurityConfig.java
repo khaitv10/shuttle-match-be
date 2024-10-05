@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -26,44 +28,39 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf((csrf) -> {
-                csrf.ignoringRequestMatchers("/h2-console/**")
-                    .disable();
-            })
-            .sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                    .requestMatchers(
-                        "/user/**",
-                        "/swagger-ui/**",
-                        "/api-docs/**",
-                        "/h2-console/**",
-                        "/user/*/register",
-                        "/user/*/login",
-                        "/user/*/login",
-                        "/user/*/login-google",
-                        "user/*/checkOtp/register",
-                            "/film/**",
-                            "/file/**",
-                            "/voucher/**",
-                            "/transaction/v1/vnpayCallback"
-                    ).permitAll()
-//                    .requestMatchers("/admin/**",
-//                            "/film/*/delete/**",
-//                            "/voucher/*/delete/**"
-//                    ).hasAuthority("ADMIN")
-//                    .requestMatchers("/superadmin/**").hasAuthority("SUPERADMIN")
-                    .anyRequest().authenticated()
-            );
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorizeHttpRequests ->
+                        authorizeHttpRequests
+                                .requestMatchers(
+                                        "/user/**",
+                                        "/swagger-ui/**",
+                                        "/api-docs/**",
+                                        "/user/*/register",
+                                        "/user/*/login",
+                                        "/user/*/login-google",
+                                        "/swipe/**"
+                                ).permitAll()
+                                .anyRequest().authenticated()
+                );
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.headers((headers) ->
-            headers
-                .frameOptions(
-                    frameOptionsConfig -> frameOptionsConfig.disable()
-                ));
         return http.build();
+    }
+
+    // Cấu hình CORS với HttpSecurityCustomizer
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+                        .allowedHeaders("*");
+            }
+        };
     }
 
     @Bean
