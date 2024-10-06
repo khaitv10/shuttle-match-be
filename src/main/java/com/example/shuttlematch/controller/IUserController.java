@@ -85,5 +85,5 @@ public interface IUserController {
             summary = "Get Information"
     )
     @GetMapping("/v1/getInfo/{id}")
-    ResponseEntity<ApiResponse<UserResponse>> getInfo(Long id);
+    ResponseEntity<ApiResponse<UserResponse>> getInfo(@PathVariable(name = "id") Long id);
 }
