@@ -34,5 +34,5 @@ public class Match {
     private LocalDateTime matchTime;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private boolean active;
 }

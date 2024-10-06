@@ -19,8 +19,8 @@ public enum ResponseCode {
     USER_PHONE_EXISTED(10008,"User phone existed"),
 
     PASSWORD_NOT_FOUND(10009,"Password is wrong"),
-    INVALID_GOOGLE_TOKEN(10009,"Invalid google token"),
-    LOGIN_GOOGLE_FAILED(10009,"Login google failed"),
+    INVALID_GOOGLE_TOKEN(10010,"Invalid google token"),
+    LOGIN_GOOGLE_FAILED(10011,"Login google failed"),
 
 
 
@@ -28,15 +28,14 @@ public enum ResponseCode {
     USER_PHOTO_COUNT_INVALID(101002,"User photo number from 2 to 6"),
     REQUIRED_FIELDS_MISSING(101003,"Required fields missing"),
     AGE_NEED_OVER_16(101004,"Your age need over 16"),
+    RUN_OUT_OF_LIKE(101005,"You have run out of likes for the day"),
+    NOT_HAVE_LIKE(101006,"No one likes you"),
+    USER_NOT_MATCH(101007,"User not matched"),
 
 
 
-    FILM_EXISTED(102001,"Film existed"),
-    CREATE_FILM_FAILED(102002, "Create film failed"),
-    FILM_NOT_FOUND(102003,"Film not found"),
-    FILM_DELETED(102004,"Film deleted"),
 
-    WRONG_RATING(200001, "Rating from 1 - 5"),
+
 
 
     ;

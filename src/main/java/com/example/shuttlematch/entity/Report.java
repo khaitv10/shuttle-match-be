@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "reports")
+@Accessors(chain=true)
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

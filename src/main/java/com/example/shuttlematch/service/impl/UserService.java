@@ -5,6 +5,7 @@ import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.enums.Role;
 import com.example.shuttlematch.entity.*;
 import com.example.shuttlematch.enums.Status;
+import com.example.shuttlematch.enums.SwipeType;
 import com.example.shuttlematch.exception.BusinessException;
 import com.example.shuttlematch.exception.GlobalException;
 import com.example.shuttlematch.payload.common.ApiResponse;
@@ -12,6 +13,7 @@ import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
 import com.example.shuttlematch.payload.response.UserSummaryResponse;
+import com.example.shuttlematch.repository.SwipeRepository;
 import com.example.shuttlematch.repository.UserPhotoRepository;
 import com.example.shuttlematch.repository.UserRepository;
 import com.example.shuttlematch.security.jwt.JwtUtilities;
@@ -44,6 +46,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,6 +57,7 @@ public class UserService implements IUserService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final SwipeRepository swipeRepository;
     private final UserPhotoRepository userPhotoRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -148,9 +152,9 @@ public class UserService implements IUserService {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Login successful for email: {}", request.getEmail());
-            User user = userRepository.findByEmailAndStatus(authentication.getName(),Status.ACTIVE).orElseThrow(
+            User user = userRepository.findByEmail(authentication.getName()).orElseThrow(
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND));
-            if (user.getReportCount() >= 2 || user.getStatus().equals(Status.BANNED)) {
+            if (user.getReportCount() >= 3 || user.getStatus().equals(Status.BANNED)) {
                 throw new BusinessException(ResponseCode.USER_BANNED_AND_INACTIVE);
             }
             List<String> rolesNames = new ArrayList<>();
@@ -187,10 +191,13 @@ public class UserService implements IUserService {
                 String email = (String) jsonData.get("email");
                 String givenName = (String) jsonData.get("given_name");
                 //String picture = (String) jsonData.get("picture");
-                Optional<User> userOpt = userRepository.findByEmail (email);
+                Optional<User> userOpt = userRepository.findByEmail(email);
                 User user;
                 if (userOpt.isPresent()) {
                     user = userOpt.get();
+                    if (user.getReportCount() >= 3 || user.getStatus().equals(Status.BANNED)) {
+                        throw new BusinessException(ResponseCode.USER_BANNED_AND_INACTIVE);
+                    }
                 }
                 else
                 {
@@ -402,13 +409,18 @@ public class UserService implements IUserService {
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
             String currentEmail = currentUser.getEmail();
-            List<User> userList = userRepository.findAll();
+            List<Swipe> listSwiped = swipeRepository.findByFromUserIdAndSwipeType(currentUser.getId(), SwipeType.LIKE);
+            Set<Long> likedUserIds = listSwiped.stream()
+                    .map(swipe -> swipe.getToUser().getId())  // Assuming Swipe entity has a getToUser() method to get the liked user
+                    .collect(Collectors.toSet());
+            List<User> userList = userRepository.findAllByStatus(Status.ACTIVE);
 
             //random user
             Collections.shuffle(userList);
 
             List<UserSummaryResponse> filteredUsers = userList.stream()
                     .filter(user -> !user.getEmail().equals(currentEmail))
+                    .filter(user -> !likedUserIds.contains(user.getId()))
                     .map(UserSummaryResponse::new)
                     .toList();
 
