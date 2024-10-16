@@ -55,7 +55,7 @@ public interface IUserController {
     @Operation(
             summary = "Change password"
     )
-    @PostMapping("/v1/change-password")
+    @PutMapping("/v1/change-password")
     ResponseEntity<ApiResponse<String>> changePassword(@Valid Principal principal, @RequestBody PasswordChangeRequest request);
 
 

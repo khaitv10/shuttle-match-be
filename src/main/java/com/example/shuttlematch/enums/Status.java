@@ -10,6 +10,10 @@ public enum Status {
     BANNED,
 
     PENDING,
-    MATCHED
+    MATCHED,
+
+    COMPLETED,
+    FAILED,
+    CANCELED
     
 }

@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface MatchRepository extends JpaRepository<Match, Long> {
     Match findByUser1IdAndUser2IdAndActive(Long user1id, Long user2id, boolean isActive);
     Match findByUser2IdAndUser1IdAndActive(Long user1id, Long user2id, boolean isActive);
+
+    boolean existsByUser1IdAndUser2Id(Long user1, Long user2);
 }
