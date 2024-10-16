@@ -40,7 +40,10 @@ public class SpringSecurityConfig {
                                         "/user/*/register",
                                         "/user/*/login",
                                         "/user/*/login-google",
-                                        "/swipe/**"
+                                        "/swipe/**",
+                                        "/chat/**",
+                                        "/payos/**",
+                                        "/user-subscription/**"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 );

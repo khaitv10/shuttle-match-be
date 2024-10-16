@@ -24,7 +24,6 @@ import java.util.List;
 @Valid
 public class UserController implements IUserController {
 
-
     @Autowired
     private IUserService userService;
 

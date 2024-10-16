@@ -34,6 +34,18 @@ public enum ResponseCode {
 
 
 
+            MESSAGE_SENT_SUCCESS(102000,"Message sent successfully"),
+            MESSAGE_SENT_FAIl(102001,"Message sent fail"),
+            MESSAGE_EMPTY(102002,"Message content not be empty"),
+
+
+    SUBSCRIPTION_NOT_FOUND(10300,"Subscription not found"),
+    USER_SUBSCRIPTION_NOT_FOUND(10301,"User Subscription not found"),
+
+    TRANSACTION_NOT_FOUND(10302,"Transaction not found"),
+    TRANSACTION_PAID(10303,"Transaction has already been paid"),
+
+
 
 
 

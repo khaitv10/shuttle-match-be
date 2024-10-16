@@ -26,6 +26,7 @@ public class Transaction {
     private User user;
 
     @Column(name = "transaction_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
     @Column(name = "amount")
@@ -34,6 +35,9 @@ public class Transaction {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name = "reference_code")
+    private String referenceCode;
 
     @Column(name = "code")
     private String code;

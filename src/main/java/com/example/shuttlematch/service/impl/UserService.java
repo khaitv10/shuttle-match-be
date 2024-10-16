@@ -13,9 +13,7 @@ import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
 import com.example.shuttlematch.payload.response.UserSummaryResponse;
-import com.example.shuttlematch.repository.SwipeRepository;
-import com.example.shuttlematch.repository.UserPhotoRepository;
-import com.example.shuttlematch.repository.UserRepository;
+import com.example.shuttlematch.repository.*;
 import com.example.shuttlematch.security.jwt.JwtUtilities;
 import com.example.shuttlematch.service.IUserService;
 import jakarta.transaction.Transactional;
@@ -59,6 +57,8 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final SwipeRepository swipeRepository;
     private final UserPhotoRepository userPhotoRepository;
+    private final UserSubscriptionRepository userSubscriptionRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final JwtUtilities jwtUtilities;
@@ -114,7 +114,15 @@ public class UserService implements IUserService {
                     userPhotoRepository.save(userPhoto);
                 }
 
-                return new ResponseEntity<ApiResponse<UserResponse>>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user)), HttpStatus.OK);
+                Subscription subscription = subscriptionRepository.findById(1);
+                UserSubscription userSubscription = new UserSubscription()
+                        .setUser(user)
+                        .setSubscription(subscription)
+                        .setActive(true);
+
+                userSubscriptionRepository.save(userSubscription);
+
+                return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user)), HttpStatus.OK);
             }
         } catch (BusinessException e) {
             throw e;
@@ -209,6 +217,14 @@ public class UserService implements IUserService {
                     user.setRole(Set.of(Role.USER));
                     user.setCreatedAt(LocalDateTime.now());
                     userRepository.save(user);
+
+                    Subscription subscription = subscriptionRepository.findById(1);
+                    UserSubscription userSubscription = new UserSubscription()
+                            .setUser(user)
+                            .setSubscription(subscription)
+                            .setActive(true);
+
+                    userSubscriptionRepository.save(userSubscription);
                 }
 
 
