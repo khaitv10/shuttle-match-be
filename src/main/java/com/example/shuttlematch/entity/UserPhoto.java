@@ -20,7 +20,7 @@ public class UserPhoto {
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }

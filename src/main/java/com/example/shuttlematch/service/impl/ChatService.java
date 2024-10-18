@@ -29,33 +29,34 @@ public class ChatService implements IChatService {
 
     @Override
     public ApiResponse<String> sendMessage(ChatMessage chatMessage, String senderEmail) {
-        User sender = userRepository.findByEmail(senderEmail).orElseThrow(
-                () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
-        );
-        User receiver = userRepository.findById(chatMessage.getReceiverId()).orElseThrow(
-                () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
-        );
-
-        boolean isMatched = matchRepository.existsByUser1IdAndUser2Id(sender.getId(), receiver.getId()) ||
-                            matchRepository.existsByUser1IdAndUser2Id(receiver.getId(), sender.getId());
-
-        if (!isMatched) {
-            return new ApiResponse<>(ResponseCode.USER_NOT_MATCH, "User not matched");
-        }
-
-        if (chatMessage.getContent() == null || chatMessage.getContent().trim().isEmpty()) {
-            return new ApiResponse<>(ResponseCode.MESSAGE_EMPTY, "Message content cannot be empty");
-        }
-
-        Message message = new Message()
-                .setSender(sender)
-                .setReceiver(receiver)
-                .setContent(chatMessage.getContent())
-                .setType(MessageType.CHAT);
-
-        messageRepository.save(message);
-
-        return new ApiResponse<>(ResponseCode.MESSAGE_SENT_SUCCESS, "Message sent successfully");
+//        User sender = userRepository.findByEmail(senderEmail).orElseThrow(
+//                () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+//        );
+//        User receiver = userRepository.findById(chatMessage.getReceiverId()).orElseThrow(
+//                () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+//        );
+//
+//        boolean isMatched = matchRepository.existsByUser1IdAndUser2Id(sender.getId(), receiver.getId()) ||
+//                            matchRepository.existsByUser1IdAndUser2Id(receiver.getId(), sender.getId());
+//
+//        if (!isMatched) {
+//            return new ApiResponse<>(ResponseCode.USER_NOT_MATCH, "User not matched");
+//        }
+//
+//        if (chatMessage.getContent() == null || chatMessage.getContent().trim().isEmpty()) {
+//            return new ApiResponse<>(ResponseCode.MESSAGE_EMPTY, "Message content cannot be empty");
+//        }
+//
+//        Message message = new Message()
+//                .setSender(sender)
+//                .setReceiver(receiver)
+//                .setContent(chatMessage.getContent())
+//                .setType(MessageType.CHAT);
+//
+//        messageRepository.save(message);
+//
+//        return new ApiResponse<>(ResponseCode.MESSAGE_SENT_SUCCESS, "Message sent successfully");
+        return null;
     }
 
 

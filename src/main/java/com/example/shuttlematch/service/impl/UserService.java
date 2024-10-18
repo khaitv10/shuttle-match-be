@@ -122,7 +122,22 @@ public class UserService implements IUserService {
 
                 userSubscriptionRepository.save(userSubscription);
 
-                return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user)), HttpStatus.OK);
+                // Fetch lại user cùng ảnh sau khi đã lưu
+                User savedUser = userRepository.findByIdWithPhotos(user.getId())
+                        .orElseThrow(() -> new BusinessException(ResponseCode.USER_REGISTER_FAILED));
+
+                System.out.println("Photos for user: " + savedUser.getUserPhotos().size());
+                for (UserPhoto photo : savedUser.getUserPhotos()) {
+                    System.out.println("Photo URL: " + photo.getPhotoUrl());
+                }
+
+                Set<UserPhoto> listPts = userPhotoRepository.findByUserId(savedUser.getId());
+                System.out.println("Photos for user: " + listPts.size());
+                for (UserPhoto photo : listPts) {
+                    System.out.println("Photo URL: " + photo.getPhotoUrl());
+                }
+
+                return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(savedUser, listPts)), HttpStatus.OK);
             }
         } catch (BusinessException e) {
             throw e;

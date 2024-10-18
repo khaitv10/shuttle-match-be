@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface UserPhotoRepository extends JpaRepository<UserPhoto, Long> {
-    Set<String> findByUserId(Long id);
+    Set<UserPhoto> findByUserId(Long id);
 }
