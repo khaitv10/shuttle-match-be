@@ -10,15 +10,15 @@ import lombok.*;
 @Builder
 public class ChatMessage {
     private String content;
-    private Long senderId;
-    private Long receiverId;
+    private String sender;
+    private String receiver;
     private MessageType type;
     private long timestamp;
 
-    public ChatMessage(String content, Long senderId, Long receiverId, MessageType type) {
+    public ChatMessage(String content, String sender, String receiver, MessageType type) {
         this.content = content;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+        this.sender = sender;
+        this.receiver = receiver;
         this.type = type;
         this.timestamp = System.currentTimeMillis(); // Tự động set timestamp khi khởi tạo
     }

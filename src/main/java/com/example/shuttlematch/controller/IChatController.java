@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.util.List;
 
-@Tag(name = "Chat controller")
-@RequestMapping("/chat")
-@Validated
-public interface IChatController {
-    @Operation(
-            summary = "Send a message"
-    )
-    @MessageMapping("/v1/chat-send")
-    ResponseEntity<ApiResponse<String>> sendMessage(@Payload ChatMessage chatMessage, Principal principal);
-
-}
+//@Tag(name = "Chat controller")
+//@RequestMapping("/chat")
+//@Validated
+//public interface IChatController {
+//    @Operation(
+//            summary = "Send a message"
+//    )
+//    @MessageMapping("/v1/chat-send")
+//    ResponseEntity<ApiResponse<String>> sendMessage(@Payload ChatMessage chatMessage, Principal principal);
+//
+//}

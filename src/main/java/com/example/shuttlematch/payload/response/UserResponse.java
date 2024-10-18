@@ -7,7 +7,6 @@ import com.example.shuttlematch.enums.Level;
 import com.example.shuttlematch.enums.Role;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.Time;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -58,8 +57,31 @@ public class UserResponse {
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
         this.role = user.getRole();
-
         this.photos = user.getUserPhotos().stream()
+                .map(UserPhoto::getPhotoUrl)
+                .collect(Collectors.toSet());
+    }
+
+    public UserResponse(User user, Set<UserPhoto> userPhotos) {
+        this.id = user.getId();
+        this.fullName = user.getFullName();
+        this.phone = user.getPhone();
+        this.email = user.getEmail();
+        this.dob = user.getDob();
+        this.occupation = user.getOccupation();
+        this.gender = user.getGender();
+        this.level = user.getLevel();
+        this.description = user.getDescription();
+        this.location = user.getLocation();
+        this.availableTime = user.getAvailableTime();
+        this.diamondMember = user.isDiamondMember();
+        this.likeRemaining = user.getLikeRemaining();
+        this.reportCount = user.getReportCount();
+        this.status = user.getStatus();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
+        this.role = user.getRole();
+        this.photos = userPhotos.stream()
                 .map(UserPhoto::getPhotoUrl)
                 .collect(Collectors.toSet());
     }
