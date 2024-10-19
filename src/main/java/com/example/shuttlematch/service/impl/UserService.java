@@ -1,13 +1,12 @@
 package com.example.shuttlematch.service.impl;
 
 
+import com.example.shuttlematch.entity.*;
 import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.enums.Role;
-import com.example.shuttlematch.entity.*;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.SwipeType;
 import com.example.shuttlematch.exception.BusinessException;
-import com.example.shuttlematch.exception.GlobalException;
 import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.HttpStatus;
@@ -30,7 +28,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,7 +57,6 @@ public class UserService implements IUserService {
     private final UserSubscriptionRepository userSubscriptionRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
     private final JwtUtilities jwtUtilities;
     //private final IServiceMail serviceMail;
 
