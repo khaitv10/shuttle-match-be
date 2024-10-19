@@ -18,7 +18,6 @@ public class CorsConfig implements WebMvcConfigurer{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.setAllowedOrigins(List.of(
                 "http://127.0.0.1:8080",
                 "https://shuttle-match-be.onrender.com",
@@ -27,9 +26,8 @@ public class CorsConfig implements WebMvcConfigurer{
                 "http://localhost:5174"
         ));
 
-        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
