@@ -46,7 +46,8 @@ public class SpringSecurityConfig {
                                         "/swipe/**",
                                         "/chat/**",
                                         "/payos/**",
-                                        "/user-subscription/**"
+                                        "/user-subscription/**",
+                                        "/subscription/**"
                                 ).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/**").permitAll()
