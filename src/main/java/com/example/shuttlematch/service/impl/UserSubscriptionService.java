@@ -65,7 +65,7 @@ public class UserSubscriptionService implements IUserSubscriptionService {
                 user.setLikeRemaining(user.getLikeRemaining() + 5);
                 user.setUpdatedAt(LocalDateTime.now());
 
-                userSubscription.setSubscription(subscriptionRepository.findById(4));
+                userSubscription.setSubscription(subscriptionRepository.findById(3));
                 userSubscription.setStartDate(LocalDateTime.now());
                 userSubscription.setEndDate(LocalDateTime.now().plusDays(1));
                 userRepository.save(user);
