@@ -442,7 +442,7 @@ public class UserService implements IUserService {
             Collections.shuffle(userList);
 
             List<UserSummaryResponse> filteredUsers = userList.stream()
-                    .filter(user -> !user.getEmail().equals(currentEmail))
+                    .filter(user -> !user.getEmail().equals(currentEmail) && !user.getFullName().equals("Admin"))
                     .filter(user -> !likedUserIds.contains(user.getId()))
                     .map(UserSummaryResponse::new)
                     .toList();

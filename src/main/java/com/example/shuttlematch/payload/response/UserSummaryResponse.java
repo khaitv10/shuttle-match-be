@@ -2,6 +2,7 @@ package com.example.shuttlematch.payload.response;
 
 import com.example.shuttlematch.entity.User;
 import com.example.shuttlematch.entity.UserPhoto;
+import com.example.shuttlematch.enums.Level;
 import com.example.shuttlematch.enums.Time;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,15 +23,19 @@ public class UserSummaryResponse {
     private String age;
     private String description;
     private String location;
+    private Level level;
+    private Set<Time> availableTime;
     private Set<String> photos;
 
     public UserSummaryResponse(User user) {
-         this.id = user.getId();
-         this.fullName = user.getFullName();
-         this.age = calculateAge(user.getDob());
-         this.description = user.getDescription();
-         this.location = user.getLocation();
-         this.photos = user.getUserPhotos().stream()
+        this.id = user.getId();
+        this.fullName = user.getFullName();
+        this.age = calculateAge(user.getDob());
+        this.description = user.getDescription();
+        this.location = user.getLocation();
+        this.level = user.getLevel();
+        this.availableTime = user.getAvailableTime();
+        this.photos = user.getUserPhotos().stream()
                 .map(UserPhoto::getPhotoUrl)
                 .collect(Collectors.toSet());
     }
@@ -41,5 +46,6 @@ public class UserSummaryResponse {
         }
         return String.valueOf(Period.between(dob, LocalDate.now()).getYears());
     }
-
 }
+
+
