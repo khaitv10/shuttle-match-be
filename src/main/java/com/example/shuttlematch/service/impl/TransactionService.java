@@ -3,7 +3,6 @@ package com.example.shuttlematch.service.impl;
 import com.example.shuttlematch.entity.Subscription;
 import com.example.shuttlematch.entity.Transaction;
 import com.example.shuttlematch.entity.User;
-import com.example.shuttlematch.entity.UserSubscription;
 import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.TransactionType;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import vn.payos.type.CheckoutResponseData;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -96,6 +96,28 @@ public class TransactionService implements ITransactionService {
         return new ApiResponse<>(ResponseCode.SUCCESS, response);
     }
 
+
+    @Override
+    public ApiResponse<List<TransactionResponse>> getAllPaymentUser(String email) {
+        try {
+            User user = userRepository.findByEmail(email).orElseThrow(
+                    () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+            );
+
+            long userId = user.getId();
+            List<Transaction> transactionList = transactionRepository.findAllByUserId(userId);
+            if (transactionList.isEmpty()) throw new BusinessException(ResponseCode.TRANSACTION_NOT_FOUND);
+
+            List<TransactionResponse> responseList = transactionList.stream()
+                    .filter(transaction -> transaction.getStatus().equals(Status.COMPLETED))
+                    .map(TransactionResponse::new)
+                    .toList();
+
+            return new ApiResponse<>(ResponseCode.SUCCESS, responseList);
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.FAILED);
+        }
+    }
 
 
 }

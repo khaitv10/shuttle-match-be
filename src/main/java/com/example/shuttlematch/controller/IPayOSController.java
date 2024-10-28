@@ -16,6 +16,7 @@ import vn.payos.type.PaymentLinkData;
 
 
 import java.security.Principal;
+import java.util.List;
 
 @Tag(name = "PayOS controller")
 @RequestMapping("/payos")
@@ -39,4 +40,10 @@ public interface IPayOSController {
 //    )
 //    @PutMapping("/v1/updateTransaction")
 //    ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@RequestParam long transactionId);
+
+    @Operation(
+            summary = "Get all payment of user"
+    )
+    @GetMapping("/v1/getAllPaymentUser")
+    ResponseEntity<ApiResponse<List<TransactionResponse>>> getAllPaymentUser(@Valid Principal principal);
 }
