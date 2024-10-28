@@ -16,3 +16,4 @@ jobs:
 
     - name: Run 'docker compose'
       run: docker compose -f compose.yml up --build -d
+      working-directory: /home/vukhai/actions-runner/_work/shuttle-match-be/shuttle-match-be/
