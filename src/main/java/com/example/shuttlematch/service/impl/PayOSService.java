@@ -47,7 +47,7 @@ public class PayOSService implements IPayOSService {
         PaymentData paymentData = PaymentData.builder()
                 .orderCode((long) payOSRequest.getOrderId())
                 .amount((int) payOSRequest.getAmount())
-                .description("Subscription Payment")
+                .description(payOSRequest.getSubName())
                 .items(items)
                 .cancelUrl(payOSRequest.getCancelUrl())
                 .returnUrl(payOSRequest.getRedirectUrl())
