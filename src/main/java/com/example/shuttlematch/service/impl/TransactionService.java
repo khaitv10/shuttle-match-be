@@ -98,17 +98,6 @@ public class TransactionService implements ITransactionService {
 
 
 
-//    private void updateUserSubscription(Transaction transaction, CheckoutResponseData checkoutResponseData) {
-//        Long userId = transaction.getUser().getId();
-//        UserSubscription userSubscription = userSubscriptionRepository.findByUserId(userId);
-//
-//        if (!checkoutResponseData.getStatus().equals("PAID")) {
-//            return;
-//        }
-//        if (transaction.getTransactionType().equals(TransactionType.LIKE)) {
-//            userSubscription.setSubscription()
-//        }
-//    }
 }
 
 

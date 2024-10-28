@@ -34,9 +34,9 @@ public interface IPayOSController {
     @PostMapping("/v1/subscriptionPayment")
     ResponseEntity<ApiResponse<PaymentResponse>> subscriptionPayment(@Valid @RequestBody SubscriptionPaymentRequest request, Principal principal);
 
-    @Operation(
-            summary = "Update transaction when payment success"
-    )
-    @PutMapping("/v1/updateTransaction")
-    ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@RequestParam long transactionId);
+//    @Operation(
+//            summary = "Update transaction when payment success"
+//    )
+//    @PutMapping("/v1/updateTransaction")
+//    ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@RequestParam long transactionId);
 }

@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class UserResponse {
     private String phone;
     private String email;
     private LocalDate dob;
+    private String age;
     private String occupation;
     private String gender;
     private Level level;
@@ -44,6 +46,7 @@ public class UserResponse {
         this.phone = user.getPhone();
         this.email = user.getEmail();
         this.dob = user.getDob();
+        this.age = calculateAge(user.getDob());
         this.occupation = user.getOccupation();
         this.gender = user.getGender();
         this.level = user.getLevel();
@@ -68,6 +71,7 @@ public class UserResponse {
         this.phone = user.getPhone();
         this.email = user.getEmail();
         this.dob = user.getDob();
+        this.age = calculateAge(user.getDob());
         this.occupation = user.getOccupation();
         this.gender = user.getGender();
         this.level = user.getLevel();
@@ -84,6 +88,14 @@ public class UserResponse {
         this.photos = userPhotos.stream()
                 .map(UserPhoto::getPhotoUrl)
                 .collect(Collectors.toSet());
+    }
+
+
+    private String calculateAge(LocalDate dob) {
+        if (dob == null) {
+            return "";
+        }
+        return String.valueOf(Period.between(dob, LocalDate.now()).getYears());
     }
 
 }

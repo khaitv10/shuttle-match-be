@@ -70,10 +70,10 @@ public class PayOSController implements IPayOSController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(long transactionId) {
-        log.info("Has a request to update transaction with id: {}", transactionId);
-        ApiResponse<TransactionResponse> response = transactionService.updateTransaction(transactionId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(long transactionId) {
+//        log.info("Has a request to update transaction with id: {}", transactionId);
+//        ApiResponse<TransactionResponse> response = transactionService.updateTransaction(transactionId);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }
