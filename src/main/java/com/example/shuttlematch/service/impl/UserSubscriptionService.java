@@ -5,6 +5,7 @@ import com.example.shuttlematch.entity.Transaction;
 import com.example.shuttlematch.entity.User;
 import com.example.shuttlematch.entity.UserSubscription;
 import com.example.shuttlematch.enums.ResponseCode;
+import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.SwipeType;
 import com.example.shuttlematch.enums.TransactionType;
 import com.example.shuttlematch.exception.BusinessException;
@@ -65,12 +66,15 @@ public class UserSubscriptionService implements IUserSubscriptionService {
                 user.setLikeRemaining(user.getLikeRemaining() + 5);
                 user.setUpdatedAt(LocalDateTime.now());
 
-                userSubscription.setSubscription(subscriptionRepository.findById(4));
+                userSubscription.setSubscription(subscriptionRepository.findById(3));
                 userSubscription.setStartDate(LocalDateTime.now());
                 userSubscription.setEndDate(LocalDateTime.now().plusDays(1));
                 userRepository.save(user);
                 userSubscriptionRepository.save(userSubscription);
             }
+
+            transaction.setStatus(Status.COMPLETED);
+            transactionRepository.save(transaction);
 
             UserSubscriptionResponse response = new UserSubscriptionResponse(userSubscription);
             return new ApiResponse<>(ResponseCode.SUCCESS, response);

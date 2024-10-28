@@ -20,6 +20,6 @@ public class ChatMessage {
         this.sender = sender;
         this.receiver = receiver;
         this.type = type;
-        this.timestamp = System.currentTimeMillis(); // Tự động set timestamp khi khởi tạo
+        this.timestamp = System.currentTimeMillis();
     }
 }

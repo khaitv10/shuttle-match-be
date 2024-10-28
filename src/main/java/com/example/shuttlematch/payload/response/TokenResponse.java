@@ -8,11 +8,13 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TokenResponse {
+    private long userId;
     private String email;
     private String accessToken;
 
-    public TokenResponse(String email, String accessToken){
-        this. email = email;
-        this. accessToken = accessToken ;
+    public TokenResponse(long userId, String email, String accessToken){
+        this.userId = userId;
+        this.email = email;
+        this.accessToken = accessToken ;
     }
 }

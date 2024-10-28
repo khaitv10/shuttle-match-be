@@ -20,6 +20,7 @@ import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.PaymentLinkData;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -70,10 +71,18 @@ public class PayOSController implements IPayOSController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+//    @Override
+//    public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(long transactionId) {
+//        log.info("Has a request to update transaction with id: {}", transactionId);
+//        ApiResponse<TransactionResponse> response = transactionService.updateTransaction(transactionId);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
+
     @Override
-    public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(long transactionId) {
-        log.info("Has a request to update transaction with id: {}", transactionId);
-        ApiResponse<TransactionResponse> response = transactionService.updateTransaction(transactionId);
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getAllPaymentUser(Principal principal) {
+        log.info("Has a request to get all payment with user: {}", principal.getName());
+        ApiResponse<List<TransactionResponse>> response = transactionService.getAllPaymentUser(principal.getName());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

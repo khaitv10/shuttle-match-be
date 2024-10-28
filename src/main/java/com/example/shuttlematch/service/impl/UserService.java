@@ -70,6 +70,7 @@ public class UserService implements IUserService {
 //    }
 
     @Override
+    @Transactional
     public ResponseEntity<ApiResponse<UserResponse>> register(UserRegisterRequest request) {
         try {
             Set<String> photos = request.getPhoto();
@@ -79,11 +80,14 @@ public class UserService implements IUserService {
 
             if (userRepository.existsByEmail(request.getEmail())) {
                 throw new BusinessException(ResponseCode.USER_EMAIL_EXISTED);
-            } else if (userRepository.existsByPhone(request.getPhone())) {
+            }
+            if (userRepository.existsByPhone(request.getPhone())) {
                 throw new BusinessException(ResponseCode.USER_PHONE_EXISTED);
-            } else if (Period.between(request.getDob(), LocalDate.now()).getYears() < 16) {
+            }
+            if (Period.between(request.getDob(), LocalDate.now()).getYears() < 16) {
                 throw new BusinessException(ResponseCode.AGE_NEED_OVER_16);
-            } else {
+            }
+
                 User user = new User();
                 user.setEmail(request.getEmail());
                 user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -118,15 +122,6 @@ public class UserService implements IUserService {
 
                 userSubscriptionRepository.save(userSubscription);
 
-                // Fetch lại user cùng ảnh sau khi đã lưu
-//                User savedUser = userRepository.findByIdWithPhotos(user.getId())
-//                        .orElseThrow(() -> new BusinessException(ResponseCode.USER_REGISTER_FAILED));
-//
-//                System.out.println("Photos for user: " + savedUser.getUserPhotos().size());
-//                for (UserPhoto photo : savedUser.getUserPhotos()) {
-//                    System.out.println("Photo URL: " + photo.getPhotoUrl());
-//                }
-
                 // Fetch photos of new user
                 Set<UserPhoto> listPts = userPhotoRepository.findByUserId(user.getId());
                 System.out.println("Photos for user: " + listPts.size());
@@ -135,7 +130,7 @@ public class UserService implements IUserService {
                 }
 
                 return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user, listPts)), HttpStatus.OK);
-            }
+
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
@@ -180,7 +175,7 @@ public class UserService implements IUserService {
             List<String> rolesNames = new ArrayList<>();
             user.getRole().forEach(r -> rolesNames.add(r.name()));
             String accessToken = jwtUtilities.generateToken(user.getUsername(), rolesNames);
-            return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getEmail(), accessToken));
+            return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), accessToken));
 
 
         } catch (BadCredentialsException e) {
@@ -245,7 +240,7 @@ public class UserService implements IUserService {
                 String accessToken = jwtUtilities.generateToken(user.getUsername(), rolesNames);
 
                 log.info("Google API Response: {}", response.toString());
-                return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getEmail(), accessToken));
+                return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), accessToken));
 
             }
             else
@@ -447,7 +442,7 @@ public class UserService implements IUserService {
             Collections.shuffle(userList);
 
             List<UserSummaryResponse> filteredUsers = userList.stream()
-                    .filter(user -> !user.getEmail().equals(currentEmail))
+                    .filter(user -> !user.getEmail().equals(currentEmail) && !user.getFullName().equals("Admin"))
                     .filter(user -> !likedUserIds.contains(user.getId()))
                     .map(UserSummaryResponse::new)
                     .toList();

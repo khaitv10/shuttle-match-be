@@ -32,8 +32,7 @@ public class UserController implements IUserController {
     public ResponseEntity<ApiResponse<UserResponse>> registerUser(UserRegisterRequest request, BindingResult result) {
         log.info("Has a request to register: {}", request.toString());
         log.info("Has validate fail: {}", result);
-        ResponseEntity<ApiResponse<UserResponse>> userResponseApiResponse = userService.register(request);
-        return userResponseApiResponse;
+        return userService.register(request);
     }
 
 //    //TODO: B2. Check OTP

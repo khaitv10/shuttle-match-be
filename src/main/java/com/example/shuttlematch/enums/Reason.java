@@ -6,6 +6,7 @@ import lombok.ToString;
 
 @RequiredArgsConstructor
 @ToString
+@Getter
 public enum Reason {
 
     INAPPROPRIATE_PHOTOS("Inappropriate Photos"),

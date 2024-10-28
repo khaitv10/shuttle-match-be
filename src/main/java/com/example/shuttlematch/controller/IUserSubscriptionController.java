@@ -27,6 +27,8 @@ public interface IUserSubscriptionController {
     )
     @PutMapping("/v1/updateUserSubscription")
     ResponseEntity<ApiResponse<UserSubscriptionResponse>> updateUserSubscription(@Valid @RequestBody UpdateUserSubRequest request);
+
+
 }
 
 

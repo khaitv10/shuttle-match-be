@@ -3,6 +3,7 @@ package com.example.shuttlematch.service.impl;
 import com.example.shuttlematch.entity.Match;
 import com.example.shuttlematch.entity.Report;
 import com.example.shuttlematch.entity.User;
+import com.example.shuttlematch.enums.Reason;
 import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.exception.BusinessException;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -76,4 +78,6 @@ public class ReportService implements IReportService {
             throw new BusinessException(ResponseCode.FAILED);
         }
     }
+
+    
 }
