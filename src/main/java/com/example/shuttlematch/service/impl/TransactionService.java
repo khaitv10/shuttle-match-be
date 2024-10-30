@@ -119,6 +119,27 @@ public class TransactionService implements ITransactionService {
         }
     }
 
+    @Override
+    public ApiResponse<List<TransactionResponse>> getAllPaymentUserId(long userId) {
+        try {
+            User user = userRepository.findUserById(userId);
+            if(user==null) throw new BusinessException(ResponseCode.USER_NOT_FOUND);
+
+            long id = user.getId();
+            List<Transaction> transactionList = transactionRepository.findAllByUserId(id);
+            if (transactionList.isEmpty()) throw new BusinessException(ResponseCode.TRANSACTION_NOT_FOUND);
+
+            List<TransactionResponse> responseList = transactionList.stream()
+                    .filter(transaction -> transaction.getStatus().equals(Status.COMPLETED))
+                    .map(TransactionResponse::new)
+                    .toList();
+
+            return new ApiResponse<>(ResponseCode.SUCCESS, responseList);
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.FAILED);
+        }
+    }
+
 
 }
 

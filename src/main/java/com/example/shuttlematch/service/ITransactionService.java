@@ -14,4 +14,5 @@ public interface ITransactionService {
     ApiResponse<TransactionResponse> updateTransaction(long transactionId);
 
     ApiResponse<List<TransactionResponse>> getAllPaymentUser(String email);
+    ApiResponse<List<TransactionResponse>> getAllPaymentUserId(long userId);
 }

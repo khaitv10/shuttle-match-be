@@ -42,8 +42,14 @@ public interface IPayOSController {
 //    ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(@RequestParam long transactionId);
 
     @Operation(
-            summary = "Get all payment of user"
+            summary = "Get all success payment of user"
     )
     @GetMapping("/v1/getAllPaymentUser")
     ResponseEntity<ApiResponse<List<TransactionResponse>>> getAllPaymentUser(@Valid Principal principal);
+
+    @Operation(
+            summary = "Get all success payment by user id"
+    )
+    @GetMapping("/v1/getAllPaymentUserId")
+    ResponseEntity<ApiResponse<List<TransactionResponse>>> getAllPaymentUserId(@RequestParam long userId);
 }

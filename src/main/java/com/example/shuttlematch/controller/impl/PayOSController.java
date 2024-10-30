@@ -85,4 +85,11 @@ public class PayOSController implements IPayOSController {
         ApiResponse<List<TransactionResponse>> response = transactionService.getAllPaymentUser(principal.getName());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getAllPaymentUserId(long userId) {
+        log.info("Has a request to get all payment with user id: {}", userId);
+        ApiResponse<List<TransactionResponse>> response = transactionService.getAllPaymentUserId(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

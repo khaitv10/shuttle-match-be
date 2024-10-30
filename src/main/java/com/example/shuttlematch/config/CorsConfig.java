@@ -17,17 +17,19 @@ import java.util.List;
 public class CorsConfig implements WebMvcConfigurer{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of(
-                "http://127.0.0.1:8088",
-                "http://localhost:8088",
+                "http://127.0.0.1:8081",
+                "http://127.0.0.1:8080",
+                "http://localhost:8081",
+                "http://localhost:8080",
                 "https://shuttle-match-be.onrender.com",
                 "https://shuttlematch.io.vn",
                 "https://shuttle-smash.vercel.app",
                 "http://localhost:5173",
                 "http://localhost:5174"
         ));
-
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
@@ -36,6 +38,8 @@ public class CorsConfig implements WebMvcConfigurer{
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+
+
     }
 
 }

@@ -9,4 +9,4 @@ services:
       - CHECKSUM_KEY=425061cc4ab7b8ecd0e12a028f5004964763fe18f27b9f323f2fa33b7373f28f
       - TZ=Asia/Ho_Chi_Minh
     ports:
-      - "8088:8080"
+      - "8081:8080"
