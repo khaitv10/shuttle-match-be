@@ -8,5 +8,6 @@ import lombok.Setter;
 public class PaymentResponse {
     private long paymentId;
     private String paymentUrl;
+    private String userName;
 
 }

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class TransactionResponse {
     private Long id;
     private Long userId;
+    private String userName;
     private TransactionType transactionType;
     private Long amount;
     private Status status;
@@ -26,6 +27,7 @@ public class TransactionResponse {
     public TransactionResponse(Transaction transaction) {
         id = transaction.getId();
         userId = transaction.getUser().getId();
+        userName = transaction.getUser().getFullName();
         transactionType = transaction.getTransactionType();
         amount = transaction.getAmount();
         status = transaction.getStatus();

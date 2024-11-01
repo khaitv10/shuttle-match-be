@@ -5,6 +5,7 @@ import com.example.shuttlematch.entity.User;
 import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.SwipeRequest;
 import com.example.shuttlematch.payload.response.UserSummaryResponse;
+import com.example.shuttlematch.service.IMatchService;
 import com.example.shuttlematch.service.ISwipeService;
 import com.example.shuttlematch.service.IUserService;
 import jakarta.validation.Valid;
@@ -23,8 +24,13 @@ import java.util.List;
 @Valid
 @RequiredArgsConstructor
 public class MatchController implements IMatchController {
-    private final IUserService userService;
-    private final ISwipeService swipeService;
 
+    private final IMatchService matchService;
 
+    @Override
+    public ResponseEntity<ApiResponse<List<UserSummaryResponse>>> getAllMatched(Principal principal) {
+        log.info("Has a request to get all matched by user: {}", principal.getName());
+        ApiResponse<List<UserSummaryResponse>> listResponse = matchService.getAllMatched(principal.getName());
+        return new ResponseEntity<>(listResponse, HttpStatus.OK);
+    }
 }

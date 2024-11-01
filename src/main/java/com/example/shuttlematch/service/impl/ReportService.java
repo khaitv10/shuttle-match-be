@@ -42,12 +42,12 @@ public class ReportService implements IReportService {
             User toUser = userRepository.findById(request.getToUserId()).orElseThrow(
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
-            Match match1 = matchRepository.findByUser1IdAndUser2IdAndActive(user.getId(), toUser.getId(), true);
-            Match match2 = matchRepository.findByUser2IdAndUser1IdAndActive(user.getId(), toUser.getId(), true);
-
-            if (match1 == null && match2 == null) {
-                throw new BusinessException(ResponseCode.USER_NOT_MATCH);
-            }
+//            Match match1 = matchRepository.findByUser1IdAndUser2IdAndActive(user.getId(), toUser.getId(), true);
+//            Match match2 = matchRepository.findByUser2IdAndUser1IdAndActive(user.getId(), toUser.getId(), true);
+//
+//            if (match1 == null && match2 == null) {
+//                throw new BusinessException(ResponseCode.USER_NOT_MATCH);
+//            }
 
             Report report = new Report()
                     .setReportTime(LocalDateTime.now())
@@ -56,17 +56,17 @@ public class ReportService implements IReportService {
                     .setReason(request.getReason());
             reportRepository.save(report);
 
-            if (match1!=null) {
-                match1.setActive(false);
-                matchRepository.save(match1);
-            }
-            if (match2!=null) {
-                match2.setActive(false);
-                matchRepository.save(match2);
-            }
+//            if (match1!=null) {
+//                match1.setActive(false);
+//                matchRepository.save(match1);
+//            }
+//            if (match2!=null) {
+//                match2.setActive(false);
+//                matchRepository.save(match2);
+//            }
 
-            toUser.setReportCount(toUser.getReportCount()+1);
-            if (toUser.getReportCount()>=3) toUser.setStatus(Status.BANNED);
+            toUser.setReportCount(toUser.getReportCount() + 1);
+            if (toUser.getReportCount() >= 3) toUser.setStatus(Status.BANNED);
             userRepository.save(toUser);
 
             return new ApiResponse<>(ResponseCode.SUCCESS, request.getReason().toString());

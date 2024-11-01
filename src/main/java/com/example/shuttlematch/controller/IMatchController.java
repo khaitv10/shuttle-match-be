@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,11 @@ import java.util.List;
 @Valid
 public interface IMatchController {
 
+    @Operation(
+            summary = "Get all people user matched"
+    )
+    @GetMapping("/v1/getAllMatched")
+    ResponseEntity<ApiResponse<List<UserSummaryResponse>>> getAllMatched(Principal principal);
 
 
 }

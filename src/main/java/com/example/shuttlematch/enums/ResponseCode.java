@@ -31,6 +31,7 @@ public enum ResponseCode {
     RUN_OUT_OF_LIKE(101005,"You have run out of likes for the day"),
     NOT_HAVE_LIKE(101006,"No one likes you"),
     USER_NOT_MATCH(101007,"User not matched"),
+    USER_NOT_HAVE_ANY_MATCH(101007,"User not have any matched"),
 
 
 

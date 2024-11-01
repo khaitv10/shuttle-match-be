@@ -2,11 +2,14 @@ package com.example.shuttlematch.controller.impl;
 
 import com.example.shuttlematch.controller.IPayOSController;
 import com.example.shuttlematch.entity.Transaction;
+import com.example.shuttlematch.entity.User;
 import com.example.shuttlematch.enums.ResponseCode;
+import com.example.shuttlematch.exception.BusinessException;
 import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.SubscriptionPaymentRequest;
 import com.example.shuttlematch.payload.response.PaymentResponse;
 import com.example.shuttlematch.payload.response.TransactionResponse;
+import com.example.shuttlematch.repository.UserRepository;
 import com.example.shuttlematch.service.impl.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import java.util.List;
 public class PayOSController implements IPayOSController {
 
     private final TransactionService transactionService;
+    private final UserRepository userRepository;
 
 
     @Value("${PAYOS_CLIENT_ID}")
@@ -60,12 +64,16 @@ public class PayOSController implements IPayOSController {
 
     @Override
     public ResponseEntity<ApiResponse<PaymentResponse>> subscriptionPayment(SubscriptionPaymentRequest request, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(
+                () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+        );
         long transactionId = transactionService.createUserSubscriptionTransaction(principal.getName(), request.getSubscriptionId());
         String paymentUrl = transactionService.getPaymentUrl(transactionId, request.getRedirectUrl());
 
         PaymentResponse paymentResponse = new PaymentResponse();
         paymentResponse.setPaymentId(transactionId);
         paymentResponse.setPaymentUrl(paymentUrl);
+        paymentResponse.setUserName(user.getFullName());
 
         ApiResponse<PaymentResponse> response = new ApiResponse<>(ResponseCode.SUCCESS, paymentResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);

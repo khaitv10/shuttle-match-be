@@ -12,6 +12,9 @@ import java.util.List;
 public interface SwipeRepository extends JpaRepository<Swipe, Long> {
     List<Swipe> findByToUserIdAndSwipeTypeAndStatus(Long id, SwipeType swipeType, Status status);
     List<Swipe> findByFromUserIdAndSwipeType(Long id, SwipeType swipeType);
+    List<Swipe> findByFromUserId(Long id);
+    List<Swipe> findByToUserId(Long id);
+    List<Swipe> findByToUserIdAndSwipeType(Long id, SwipeType swipeType);
 
     Swipe findByToUserIdAndFromUserIdAndSwipeTypeAndStatus(
             Long fromUserId,

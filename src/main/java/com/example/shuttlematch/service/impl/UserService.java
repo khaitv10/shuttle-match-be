@@ -88,48 +88,48 @@ public class UserService implements IUserService {
                 throw new BusinessException(ResponseCode.AGE_NEED_OVER_16);
             }
 
-                User user = new User();
-                user.setEmail(request.getEmail());
-                user.setPassword(passwordEncoder.encode(request.getPassword()));
-                user.setPhone(request.getPhone());
-                user.setFullName(request.getName());
-                user.setDob(request.getDob());
-                user.setGender(request.getGender().toUpperCase());
-                user.setOccupation(request.getOccupation());
-                user.setLevel(request.getLevel());
-                user.setDescription(request.getDescription());
-                user.setLocation(request.getLocation());
-                user.setAvailableTime(request.getAvailableTime());
-                user.setDiamondMember(false);
-                user.setReportCount(0);
-                user.setStatus(Status.ACTIVE);
-                user.setCreatedAt(LocalDateTime.now());
-                user.setRole(Set.of(Role.USER));
-                user = userRepository.save(user);
+            User user = new User();
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setPhone(request.getPhone());
+            user.setFullName(request.getName());
+            user.setDob(request.getDob());
+            user.setGender(request.getGender().toUpperCase());
+            user.setOccupation(request.getOccupation());
+            user.setLevel(request.getLevel());
+            user.setDescription(request.getDescription());
+            user.setLocation(request.getLocation());
+            user.setAvailableTime(request.getAvailableTime());
+            user.setDiamondMember(false);
+            user.setReportCount(0);
+            user.setStatus(Status.ACTIVE);
+            user.setCreatedAt(LocalDateTime.now());
+            user.setRole(Set.of(Role.USER));
+            user = userRepository.save(user);
 
-                for (String photoUrl : photos) {
-                    UserPhoto userPhoto = new UserPhoto();
-                    userPhoto.setPhotoUrl(photoUrl);
-                    userPhoto.setUser(user);
-                    userPhotoRepository.save(userPhoto);
-                }
+            for (String photoUrl : photos) {
+                UserPhoto userPhoto = new UserPhoto();
+                userPhoto.setPhotoUrl(photoUrl);
+                userPhoto.setUser(user);
+                userPhotoRepository.save(userPhoto);
+            }
 
-                Subscription subscription = subscriptionRepository.findById(1);
-                UserSubscription userSubscription = new UserSubscription()
-                        .setUser(user)
-                        .setSubscription(subscription)
-                        .setActive(true);
+            Subscription subscription = subscriptionRepository.findById(1);
+            UserSubscription userSubscription = new UserSubscription()
+                    .setUser(user)
+                    .setSubscription(subscription)
+                    .setActive(true);
 
-                userSubscriptionRepository.save(userSubscription);
+            userSubscriptionRepository.save(userSubscription);
 
-                // Fetch photos of new user
-                Set<UserPhoto> listPts = userPhotoRepository.findByUserId(user.getId());
-                System.out.println("Photos for user: " + listPts.size());
-                for (UserPhoto photo : listPts) {
-                    System.out.println("Photo URL: " + photo.getPhotoUrl());
-                }
+            // Fetch photos of new user
+            Set<UserPhoto> listPts = userPhotoRepository.findByUserId(user.getId());
+            System.out.println("Photos for user: " + listPts.size());
+            for (UserPhoto photo : listPts) {
+                System.out.println("Photo URL: " + photo.getPhotoUrl());
+            }
 
-                return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user, listPts)), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user, listPts)), HttpStatus.OK);
 
         } catch (BusinessException e) {
             throw e;
@@ -160,10 +160,10 @@ public class UserService implements IUserService {
         try {
             log.info("Attempting login for email: {}", request.getEmail());
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    request.getEmail(),
-                    request.getPassword()
-                )
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Login successful for email: {}", request.getEmail());
@@ -188,19 +188,19 @@ public class UserService implements IUserService {
     public ApiResponse<TokenResponse> loginGoogle(LoginGoogleRequest request) {
         String token = request.getToken();
         try {
-            URL url = new URL ("https://www.googleapis.com/oauth2/v3/userinfo");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection ();
-            connection.setRequestMethod ("GET");
+            URL url = new URL("https://www.googleapis.com/oauth2/v3/userinfo");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
             connection.setRequestProperty("Authorization", "Bearer " + token);
-            int responseCode = connection.getResponseCode ();
+            int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream ()));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                reader.close ();
+                reader.close();
                 JsonParser jsonParser = JsonParserFactory.getJsonParser();
                 Map<String, Object> jsonData = jsonParser.parseMap(response.toString());
                 String email = (String) jsonData.get("email");
@@ -213,12 +213,10 @@ public class UserService implements IUserService {
                     if (user.getReportCount() >= 3 || user.getStatus().equals(Status.BANNED)) {
                         throw new BusinessException(ResponseCode.USER_BANNED_AND_INACTIVE);
                     }
-                }
-                else
-                {
+                } else {
                     user = new User();
                     user.setEmail(email);
-                    user.setFullName (givenName);
+                    user.setFullName(givenName);
                     user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                     user.setStatus(Status.INACTIVE);
                     user.setRole(Set.of(Role.USER));
@@ -242,9 +240,7 @@ public class UserService implements IUserService {
                 log.info("Google API Response: {}", response.toString());
                 return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), accessToken));
 
-            }
-            else
-            {
+            } else {
                 throw new BusinessException(ResponseCode.INVALID_GOOGLE_TOKEN);
             }
         } catch (Exception e) {
@@ -253,7 +249,7 @@ public class UserService implements IUserService {
         }
     }
 
-    public boolean checkPasswordChange(String requestOldPass, String userPass){
+    public boolean checkPasswordChange(String requestOldPass, String userPass) {
         if (!passwordEncoder.matches(requestOldPass, userPass)) {
             throw new BusinessException(ResponseCode.PASSWORD_NOT_FOUND);
         }
@@ -261,14 +257,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ApiResponse<String> changePassword(PasswordChangeRequest request, String email){
+    public ApiResponse<String> changePassword(PasswordChangeRequest request, String email) {
         try {
             User user = userRepository.findByEmail(email).orElseThrow(
                     () -> {
                         throw new BusinessException(ResponseCode.USER_NOT_FOUND);
                     }
             );
-            if(checkPasswordChange(request.getOldPassword(), user.getPassword())){
+            if (checkPasswordChange(request.getOldPassword(), user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(request.getNewPassword()));
                 userRepository.save(user);
             }
@@ -280,15 +276,13 @@ public class UserService implements IUserService {
     }
 
 
-
-
     @Override
     public ApiResponse<UserResponse> getUserInfo(String email) {
         try {
             User user = userRepository.findByEmail(email).orElseThrow(
-                () -> {
-                    throw new BusinessException(ResponseCode.USER_NOT_FOUND);
-                }
+                    () -> {
+                        throw new BusinessException(ResponseCode.USER_NOT_FOUND);
+                    }
             );
             if (user.getStatus().equals(Status.BANNED)) {
                 throw new BusinessException(ResponseCode.USER_BANNED_AND_INACTIVE);
@@ -303,7 +297,7 @@ public class UserService implements IUserService {
         }
     }
 
-//
+    //
 //    @Override
 //    public ApiResponse<StatusResponse> checkOtpWhenRegister(CheckOtpWhenRegisterRequest request) {
 //        try {
@@ -329,7 +323,7 @@ public class UserService implements IUserService {
 //        }
 //    }
 //
-    private String getEmailRequest(){
+    private String getEmailRequest() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = authentication.getName();
@@ -337,6 +331,7 @@ public class UserService implements IUserService {
         }
         return "";
     }
+
     @Override
     public ApiResponse<UserResponse> updateUserInfo(UserUpdateRequest request) {
         try {
@@ -413,12 +408,11 @@ public class UserService implements IUserService {
             userRepository.save(user);
             return new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user));
 
-        } catch (BusinessException e){
+        } catch (BusinessException e) {
             throw e;
-        } catch (DateTimeException e ){
+        } catch (DateTimeException e) {
             throw new BusinessException(ResponseCode.DATETIME_INVALID);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Have error : {}", e.getLocalizedMessage());
             throw new BusinessException(ResponseCode.FAILED);
         }
@@ -432,18 +426,26 @@ public class UserService implements IUserService {
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
             String currentEmail = currentUser.getEmail();
-            List<Swipe> listSwiped = swipeRepository.findByFromUserIdAndSwipeType(currentUser.getId(), SwipeType.LIKE);
+
+            List<Swipe> listSwiped = swipeRepository.findByFromUserId(currentUser.getId());
             Set<Long> likedUserIds = listSwiped.stream()
                     .map(swipe -> swipe.getToUser().getId())  // Assuming Swipe entity has a getToUser() method to get the liked user
                     .collect(Collectors.toSet());
-            List<User> userList = userRepository.findAllByStatus(Status.ACTIVE);
 
+            List<Swipe> listUserSwiped = swipeRepository.findByToUserIdAndSwipeType(currentUser.getId(), SwipeType.LIKE);
+            Set<Long> UserlikedIds = listUserSwiped.stream()
+                    .map(swipe -> swipe.getFromUser().getId())
+                    .collect(Collectors.toSet());
+
+
+            List<User> userList = userRepository.findAllByStatus(Status.ACTIVE);
             //random user
             Collections.shuffle(userList);
 
             List<UserSummaryResponse> filteredUsers = userList.stream()
                     .filter(user -> !user.getEmail().equals(currentEmail) && !user.getFullName().equals("Admin"))
                     .filter(user -> !likedUserIds.contains(user.getId()))
+                    .filter(user -> !UserlikedIds.contains(user.getId()))
                     .map(UserSummaryResponse::new)
                     .toList();
 
