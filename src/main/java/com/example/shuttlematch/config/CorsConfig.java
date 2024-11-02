@@ -26,7 +26,7 @@ public class CorsConfig implements WebMvcConfigurer{
                 "http://localhost:8080",
                 "https://shuttle-match-be.onrender.com",
                 "https://shuttlematch.io.vn",
-                "https://shuttle-smash.vercel.app",
+                "https://shuttle-match.vercel.app",
                 "http://localhost:5173",
                 "http://localhost:5174"
         ));

@@ -175,7 +175,7 @@ public class UserService implements IUserService {
             List<String> rolesNames = new ArrayList<>();
             user.getRole().forEach(r -> rolesNames.add(r.name()));
             String accessToken = jwtUtilities.generateToken(user.getUsername(), rolesNames);
-            return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), accessToken));
+            return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), user.getRole(), accessToken));
 
 
         } catch (BadCredentialsException e) {
@@ -238,7 +238,7 @@ public class UserService implements IUserService {
                 String accessToken = jwtUtilities.generateToken(user.getUsername(), rolesNames);
 
                 log.info("Google API Response: {}", response.toString());
-                return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), accessToken));
+                return new ApiResponse<>(ResponseCode.SUCCESS, new TokenResponse(user.getId(), user.getEmail(), user.getRole(), accessToken));
 
             } else {
                 throw new BusinessException(ResponseCode.INVALID_GOOGLE_TOKEN);

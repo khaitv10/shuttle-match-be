@@ -3,6 +3,7 @@ package com.example.shuttlematch.service.impl;
 import com.example.shuttlematch.entity.Transaction;
 import com.example.shuttlematch.entity.User;
 import com.example.shuttlematch.enums.ResponseCode;
+import com.example.shuttlematch.enums.Role;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.exception.BusinessException;
 import com.example.shuttlematch.payload.common.ApiResponse;
@@ -16,9 +17,13 @@ import com.example.shuttlematch.service.IAdminService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -28,14 +33,18 @@ public class AdminService implements IAdminService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
 
+
     @Override
-    public ApiResponse<AllAccountResponse> getAllAccount(String email) {
+    public ApiResponse<AllAccountResponse> getAllAccount(String email, int page, int size) {
         try {
+            Pageable pageRequest = PageRequest.of(page, size);
             User currentUser = userRepository.findByEmail(email).orElseThrow(
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
+            //log.info("role: {}", currentUser.getRole());
+            if(!currentUser.getRole().contains(Role.ADMIN)) throw new BusinessException(ResponseCode.USER_DO_NOT_PERMISSION);
             String currentEmail = currentUser.getEmail();
-            List<User> userList = userRepository.findAll();
+            Page<User> userList = userRepository.findAll(pageRequest);
 
             List<UserSummaryResponse> filteredUsers = userList.stream()
                     .filter(user -> !user.getEmail().equals(currentEmail) && !user.getFullName().equals("Admin"))
@@ -48,15 +57,22 @@ public class AdminService implements IAdminService {
 
             return new ApiResponse<>(ResponseCode.SUCCESS, allAccountResponse);
         } catch (Exception e) {
-            throw new BusinessException(ResponseCode.FAILED);
+            //log.error("An error occurred: {}", e.getMessage(), e);
+            throw new BusinessException(ResponseCode.USER_DO_NOT_PERMISSION);
         }
+
     }
 
     @Override
-    public ApiResponse<AllPaymentResponse> getAllPayment() {
+    public ApiResponse<AllPaymentResponse> getAllPayment(String email, int page, int size) {
         try {
-            List<Transaction> transactionList = transactionRepository.findAll();
+            Pageable pageRequest = PageRequest.of(page, size);
+            User currentUser = userRepository.findByEmail(email).orElseThrow(
+                    () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+            );
+            if(!currentUser.getRole().contains(Role.ADMIN)) throw new BusinessException(ResponseCode.USER_DO_NOT_PERMISSION);
 
+            Page<Transaction> transactionList = transactionRepository.findAll(pageRequest);
             List<TransactionResponse> responseList = transactionList.stream()
                     .map(TransactionResponse::new)
                     .toList();
@@ -66,11 +82,15 @@ public class AdminService implements IAdminService {
                     .mapToLong(Transaction::getAmount)
                     .sum();
 
-            AllPaymentResponse allPaymentResponse = new AllPaymentResponse(revenue, responseList);
+            long totalCompleted = transactionList.stream()
+                    .filter(transaction -> transaction.getStatus().equals(Status.COMPLETED))
+                    .count();
+
+            AllPaymentResponse allPaymentResponse = new AllPaymentResponse(totalCompleted, revenue, responseList);
 
             return new ApiResponse<>(ResponseCode.SUCCESS, allPaymentResponse);
         } catch (Exception e) {
-            throw new BusinessException(ResponseCode.FAILED);
+            throw new BusinessException(ResponseCode.USER_DO_NOT_PERMISSION);
         }
     }
 }

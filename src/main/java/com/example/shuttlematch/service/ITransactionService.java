@@ -11,7 +11,7 @@ public interface ITransactionService {
 
     String getPaymentUrl(long transactionId, String redirectUrl);
 
-    ApiResponse<TransactionResponse> updateTransaction(long transactionId);
+ //   ApiResponse<TransactionResponse> updateTransaction(long transactionId);
 
     ApiResponse<List<TransactionResponse>> getAllPaymentUser(String email);
     ApiResponse<List<TransactionResponse>> getAllPaymentUserId(long userId);

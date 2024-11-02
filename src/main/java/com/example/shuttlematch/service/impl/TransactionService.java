@@ -83,18 +83,18 @@ public class TransactionService implements ITransactionService {
         return checkoutResponseData.getCheckoutUrl();
     }
 
-    @Override
-    public ApiResponse<TransactionResponse> updateTransaction(long transactionId) {
-        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow(
-                () -> new BusinessException(ResponseCode.TRANSACTION_NOT_FOUND)
-        );
-
-        transaction.setStatus(Status.COMPLETED);
-        transactionRepository.save(transaction);
-
-        TransactionResponse response = new TransactionResponse(transaction);
-        return new ApiResponse<>(ResponseCode.SUCCESS, response);
-    }
+//    @Override
+//    public ApiResponse<TransactionResponse> updateTransaction(long transactionId) {
+//        Transaction transaction = transactionRepository.findById(transactionId).orElseThrow(
+//                () -> new BusinessException(ResponseCode.TRANSACTION_NOT_FOUND)
+//        );
+//
+//        transaction.setStatus(Status.COMPLETED);
+//        transactionRepository.save(transaction);
+//
+//        TransactionResponse response = new TransactionResponse(transaction);
+//        return new ApiResponse<>(ResponseCode.SUCCESS, response);
+//    }
 
 
     @Override
