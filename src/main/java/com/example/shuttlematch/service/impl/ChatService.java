@@ -63,10 +63,6 @@ public class ChatService{
     public List<Room> getRoomsByAccountID() {
         User user = accountUtils.getCurrentUser();
         List<Room> rooms = roomRepository.findRoomsByUsersIsContaining(user);
-//        RoomResponseDTO roomResponseDTO = new RoomResponseDTO();
-//
-//        roomResponseDTO.setRoomID();
-
         if (rooms != null) {
             return rooms.stream().sorted(Comparator.comparing(Room::getLastUpdated).reversed()).collect(Collectors.toList());
         }
@@ -81,7 +77,7 @@ public class ChatService{
     }
 
     public Message sendMessage(MessageRequest messageRequest, int roomId) {
-            User user = accountUtils.getCurrentUser();
+        User user = accountUtils.getCurrentUser();
         Room roomDTO = roomRepository.findRoomByRoomID(roomId);
         Message messageDTO = new Message();
         messageDTO.setUser(user);
@@ -93,6 +89,7 @@ public class ChatService{
         for (User user1 : roomDTO.getUsers()) {
             if (user1.getId() !=(user.getId())) {
                 System.out.println("real time");
+                System.out.println(user1.getId());
                 messagingTemplate.convertAndSend("/topic/chat/" + user1.getId(), "New message");
             }
         }

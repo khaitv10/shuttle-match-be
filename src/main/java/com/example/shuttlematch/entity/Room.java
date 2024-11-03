@@ -1,5 +1,6 @@
 package com.example.shuttlematch.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,9 +30,8 @@ public class Room {
 
     String lastMessage;
     @JsonManagedReference
-
-    @ManyToMany(mappedBy = "rooms",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<User> users;
+    @ManyToMany(mappedBy = "rooms", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "room")
     private List<Message> messages;

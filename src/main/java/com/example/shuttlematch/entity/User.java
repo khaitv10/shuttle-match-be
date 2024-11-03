@@ -4,6 +4,7 @@ import com.example.shuttlematch.enums.Level;
 import com.example.shuttlematch.enums.Role;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.Time;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -95,15 +96,22 @@ public class User implements Serializable , UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<UserPhoto> userPhotos = new HashSet<>();
 
+
+
     @ManyToMany
-//    @JsonBackReference
     @JsonIgnore
+    @JsonBackReference
     @JoinTable(
             name = "room_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "room_id"))
-    private Set<Room> rooms;
+    private Set<Room> rooms = new HashSet<>();
 
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Message> messages = new HashSet<>();
     public User (String email , String password , Set<Role> role) {
         this.email = email;
         this.password = password;
