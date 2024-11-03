@@ -3,6 +3,7 @@ package com.example.shuttlematch.service.impl;
 import com.example.shuttlematch.entity.Match;
 import com.example.shuttlematch.entity.Swipe;
 import com.example.shuttlematch.entity.User;
+import com.example.shuttlematch.entity.request.RoomRequest;
 import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.enums.Status;
 import com.example.shuttlematch.enums.SwipeType;
@@ -24,6 +25,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class SwipeService implements ISwipeService {
     private final UserRepository userRepository;
     private final SwipeRepository swipeRepository;
     private final MatchRepository matchRepository;
-
+    private final  ChatService chatService;
     @Override
     public ApiResponse<String> swipe(SwipeRequest request, String email) {
         try {
@@ -46,7 +48,9 @@ public class SwipeService implements ISwipeService {
             User toUser = userRepository.findById(request.getToUserId()).orElseThrow(
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
-            Swipe swipeCheck = swipeRepository.findByToUserIdAndFromUserIdAndSwipeTypeAndStatus(fromUser.getId(), toUser.getId(), SwipeType.LIKE, null);
+            Swipe swipeCheck = swipeRepository.findByToUserIdAndFromUserIdAndSwipeTypeAndStatus(
+                    fromUser.getId(), toUser.getId(), SwipeType.LIKE, null
+            );
 
             if (request.getSwipeType().equals(SwipeType.LIKE)) {
                 if (fromUser.getLikeRemaining() == 0) {
@@ -63,6 +67,11 @@ public class SwipeService implements ISwipeService {
                     swipeRepository.save(swipeCheck);
                     userRepository.save(fromUser);
                     matchRepository.save(match);
+
+                    // Tạo phòng chat khi match
+                    RoomRequest roomRequest = new RoomRequest();
+                    roomRequest.setMembers(Arrays.asList(fromUser.getId(), toUser.getId()));
+                    chatService.createNewRoom(roomRequest);
 
                     return new ApiResponse<>(ResponseCode.SUCCESS, request.getSwipeType().toString());
                 } else {

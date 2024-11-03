@@ -81,7 +81,7 @@ public class ChatService{
     }
 
     public Message sendMessage(MessageRequest messageRequest, int roomId) {
-        User user = accountUtils.getCurrentUser();
+            User user = accountUtils.getCurrentUser();
         Room roomDTO = roomRepository.findRoomByRoomID(roomId);
         Message messageDTO = new Message();
         messageDTO.setUser(user);
