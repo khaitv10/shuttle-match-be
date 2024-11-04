@@ -38,7 +38,7 @@ public class SwipeService implements ISwipeService {
     private final UserRepository userRepository;
     private final SwipeRepository swipeRepository;
     private final MatchRepository matchRepository;
-    private final  ChatService chatService;
+    private final ChatService chatService;
     @Override
     public ApiResponse<String> swipe(SwipeRequest request, String email) {
         try {
