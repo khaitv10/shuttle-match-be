@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -101,13 +103,18 @@ public class SwipeService implements ISwipeService {
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
             List<Swipe> swipes = swipeRepository.findByToUserIdAndSwipeTypeAndStatus(user.getId(), SwipeType.LIKE, null);
-
             if (swipes.isEmpty()) {
                 return new ApiResponse<>(ResponseCode.SUCCESS, Collections.emptyList());
             }
 
+            List<Swipe> swipesPass = swipeRepository.findByFromUserIdAndSwipeType(user.getId(), SwipeType.PASS);
+            Set<Long> userPassIds = swipesPass.stream()
+                    .map(swipePass -> swipePass.getToUser().getId())
+                    .collect(Collectors.toSet());
+
             List<UserSummaryResponse> listUserLikeYou = swipes.stream()
                     .map(swipe -> new UserSummaryResponse(swipe.getFromUser())) // assuming fromUser is User
+                    .filter(userSummary -> !userPassIds.contains(userSummary.getId()))
                     .toList();
 
             return new ApiResponse<>(ResponseCode.SUCCESS, listUserLikeYou);
