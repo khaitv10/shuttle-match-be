@@ -56,6 +56,7 @@ public class UserService implements IUserService {
     private final UserPhotoRepository userPhotoRepository;
     private final UserSubscriptionRepository userSubscriptionRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final ReportRepository reportRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtilities jwtUtilities;
     //private final IServiceMail serviceMail;
@@ -437,6 +438,11 @@ public class UserService implements IUserService {
                     .map(swipe -> swipe.getFromUser().getId())
                     .collect(Collectors.toSet());
 
+            List<Report> listReported = reportRepository.findAllByReportedBy(currentUser);
+            Set<Long> userReported = listReported.stream()
+                    .map(report -> report.getReportedBy().getId())
+                    .collect(Collectors.toSet());
+
 
             List<User> userList = userRepository.findAllByStatus(Status.ACTIVE);
             //random user
@@ -446,6 +452,7 @@ public class UserService implements IUserService {
                     .filter(user -> !user.getEmail().equals(currentEmail) && !user.getFullName().equals("Admin"))
                     .filter(user -> !likedUserIds.contains(user.getId()))
                     .filter(user -> !UserlikedIds.contains(user.getId()))
+                    .filter(user -> !userReported.contains(user.getId()))
                     .map(UserSummaryResponse::new)
                     .toList();
 
