@@ -21,14 +21,14 @@ import java.security.Principal;
 public class AdminController implements IAdminController {
     private final AdminService adminService;
     @Override
-    public ResponseEntity<ApiResponse<AllAccountResponse>> getAllAccount(Principal principal, int page, int size) {
-        ApiResponse<AllAccountResponse> response = adminService.getAllAccount(principal.getName(), page, size);
+    public ResponseEntity<ApiResponse<AllAccountResponse>> getAllAccount(Principal principal, int currentPage, int size) {
+        ApiResponse<AllAccountResponse> response = adminService.getAllAccount(principal.getName(), currentPage, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<AllPaymentResponse>> getAllPayment(Principal principal, int page, int size) {
-        ApiResponse<AllPaymentResponse> response = adminService.getAllPayment(principal.getName(), page, size);
+    public ResponseEntity<ApiResponse<AllPaymentResponse>> getAllPayment(Principal principal, int currentPage, int size) {
+        ApiResponse<AllPaymentResponse> response = adminService.getAllPayment(principal.getName(), currentPage, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

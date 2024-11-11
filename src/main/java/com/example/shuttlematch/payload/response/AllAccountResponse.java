@@ -8,11 +8,13 @@ import java.util.List;
 @Getter
 @Setter
 public class AllAccountResponse {
-    private int total;
+    private int totalAccount;
+    private int totalPage;
     private List<UserSummaryResponse> listAccount;
 
-    public AllAccountResponse (int total, List<UserSummaryResponse> listAccount){
-        this.total = total;
+    public AllAccountResponse (int totalAccount, int totalPage, List<UserSummaryResponse> listAccount){
+        this.totalAccount = totalAccount;
+        this.totalPage = totalPage;
         this.listAccount = listAccount;
     }
 }

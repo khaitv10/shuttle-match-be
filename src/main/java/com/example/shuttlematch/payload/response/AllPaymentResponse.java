@@ -10,11 +10,13 @@ import java.util.List;
 public class AllPaymentResponse {
     private long totalCompleted;
     private long revenue;
+    private int totalPage;
     private List<TransactionResponse> transactionResponseList;
 
-    public AllPaymentResponse(long totalCompleted, long revenue, List<TransactionResponse> transactionResponseList) {
+    public AllPaymentResponse(long totalCompleted, long revenue, int totalPage, List<TransactionResponse> transactionResponseList) {
         this.totalCompleted = totalCompleted;
         this.revenue = revenue;
+        this.totalPage = totalPage;
         this.transactionResponseList = transactionResponseList;
     }
 }

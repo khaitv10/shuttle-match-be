@@ -25,7 +25,7 @@ public interface IAdminController {
     )
     @GetMapping("/v1/getAllAccount")
     ResponseEntity<ApiResponse<AllAccountResponse>> getAllAccount(Principal principal,
-                                                                  @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
+                                                                  @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int currentPage,
                                                                   @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int size);
 
     @Operation(
@@ -33,7 +33,7 @@ public interface IAdminController {
     )
     @GetMapping("/v1/getAllPayment")
     ResponseEntity<ApiResponse<AllPaymentResponse>> getAllPayment(Principal principal,
-                                                                  @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int page,
+                                                                  @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int currentPage,
                                                                   @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int size);
 }
 

@@ -51,9 +51,9 @@ public class AdminService implements IAdminService {
                     .map(UserSummaryResponse::new)
                     .toList();
 
-            int total = filteredUsers.size();
-
-            AllAccountResponse allAccountResponse = new AllAccountResponse(total, filteredUsers);
+            int totalAccount = filteredUsers.size();
+            int totalPage = userList.getTotalPages();
+            AllAccountResponse allAccountResponse = new AllAccountResponse(totalAccount, totalPage, filteredUsers);
 
             return new ApiResponse<>(ResponseCode.SUCCESS, allAccountResponse);
         } catch (Exception e) {
@@ -64,9 +64,9 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public ApiResponse<AllPaymentResponse> getAllPayment(String email, int page, int size) {
+    public ApiResponse<AllPaymentResponse> getAllPayment(String email, int currentPage, int size) {
         try {
-            Pageable pageRequest = PageRequest.of(page, size);
+            Pageable pageRequest = PageRequest.of(currentPage, size);
             User currentUser = userRepository.findByEmail(email).orElseThrow(
                     () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
             );
@@ -86,7 +86,8 @@ public class AdminService implements IAdminService {
                     .filter(transaction -> transaction.getStatus().equals(Status.COMPLETED))
                     .count();
 
-            AllPaymentResponse allPaymentResponse = new AllPaymentResponse(totalCompleted, revenue, responseList);
+            int totalPage = transactionList.getTotalPages();
+            AllPaymentResponse allPaymentResponse = new AllPaymentResponse(totalCompleted, revenue, totalPage, responseList);
 
             return new ApiResponse<>(ResponseCode.SUCCESS, allPaymentResponse);
         } catch (Exception e) {
