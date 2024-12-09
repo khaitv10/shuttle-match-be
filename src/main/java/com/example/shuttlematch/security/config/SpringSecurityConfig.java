@@ -47,8 +47,9 @@ public class SpringSecurityConfig {
                                         "/chat/**",
                                         "/payos/**",
                                         "/user-subscription/**",
-                                        "/subscription/**"
+                                        "/subscription/*/getAll"
                                 ).permitAll()
+                                .requestMatchers("/subscription/*/*").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()

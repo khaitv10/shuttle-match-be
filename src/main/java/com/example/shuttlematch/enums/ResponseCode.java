@@ -42,6 +42,8 @@ public enum ResponseCode {
 
     SUBSCRIPTION_NOT_FOUND(10300,"Subscription not found"),
     USER_SUBSCRIPTION_NOT_FOUND(10301,"User Subscription not found"),
+    SUBSCRIPTION_LIKE_PER_DAY(10302,"Like per day must be 5 or 10"),
+    SUBSCRIPTION_NAME_EXISTED(10303,"Subscription name already existed"),
 
     TRANSACTION_NOT_FOUND(10302,"Transaction not found"),
     TRANSACTION_PAID(10303,"Transaction has already been paid"),

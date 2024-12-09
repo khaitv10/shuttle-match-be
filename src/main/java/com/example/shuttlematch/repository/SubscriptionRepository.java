@@ -10,5 +10,9 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Subscription findById(long id);
+    Subscription findByName(String name);
+    boolean existsByName(String name);
+
+    boolean existsById(Long id);
 
 }
