@@ -7,6 +7,7 @@ import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
 import com.example.shuttlematch.payload.response.UserResponse;
 import com.example.shuttlematch.payload.response.UserSummaryResponse;
+import com.example.shuttlematch.service.IMailService;
 import com.example.shuttlematch.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -90,6 +91,13 @@ public class UserController implements IUserController {
     public ResponseEntity<ApiResponse<UserResponse>> getInfo(Long id) {
         log.info("has a request to get info with id: {}", id.toString());
         ApiResponse<UserResponse> response = userService.getInfo(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<ResponseCode>> forgotPassword(RecoverPasswordRequest request) {
+        log.info("has a request to reset password with email: {}", request.toString());
+        ApiResponse<ResponseCode> response = userService.resetPassword(request.getEmail());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

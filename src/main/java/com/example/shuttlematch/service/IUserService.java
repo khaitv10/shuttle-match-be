@@ -1,6 +1,7 @@
 package com.example.shuttlematch.service;
 
 
+import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
@@ -37,4 +38,6 @@ public interface IUserService {
     ApiResponse<List<UserSummaryResponse>> getAll(String email);
 
     ApiResponse<UserResponse> getInfo(long id);
+
+    ApiResponse<ResponseCode> resetPassword(String email);
 }

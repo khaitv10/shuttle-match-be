@@ -21,6 +21,7 @@ public enum ResponseCode {
     PASSWORD_NOT_FOUND(10009,"Password is wrong"),
     INVALID_GOOGLE_TOKEN(10010,"Invalid google token"),
     LOGIN_GOOGLE_FAILED(10011,"Login google failed"),
+    RESET_PASSWORD(10012,"New password sent to user's email"),
 
 
 

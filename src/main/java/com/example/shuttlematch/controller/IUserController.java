@@ -1,6 +1,7 @@
 package com.example.shuttlematch.controller;
 
 
+import com.example.shuttlematch.enums.ResponseCode;
 import com.example.shuttlematch.payload.common.ApiResponse;
 import com.example.shuttlematch.payload.request.*;
 import com.example.shuttlematch.payload.response.TokenResponse;
@@ -86,4 +87,10 @@ public interface IUserController {
     )
     @GetMapping("/v1/getInfo/{id}")
     ResponseEntity<ApiResponse<UserResponse>> getInfo(@PathVariable(name = "id") Long id);
+
+    @Operation(
+            summary = "Forgot Password"
+    )
+    @PostMapping("/v1/forgotPassword")
+    ResponseEntity<ApiResponse<ResponseCode>> forgotPassword(@Valid @RequestBody RecoverPasswordRequest request);
 }

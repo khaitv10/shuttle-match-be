@@ -14,6 +14,7 @@ import com.example.shuttlematch.payload.response.UserResponse;
 import com.example.shuttlematch.payload.response.UserSummaryResponse;
 import com.example.shuttlematch.repository.*;
 import com.example.shuttlematch.security.jwt.JwtUtilities;
+import com.example.shuttlematch.service.IMailService;
 import com.example.shuttlematch.service.IUserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,8 @@ import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.shuttlematch.utils.AutomaticGeneratedPassword.generateRandomPassword;
+
 
 @Service
 @Transactional
@@ -59,7 +62,7 @@ public class UserService implements IUserService {
     private final ReportRepository reportRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtilities jwtUtilities;
-    //private final IServiceMail serviceMail;
+    private final IMailService mailService;
 
 //    @Value("${spring.mail.username}")
 //    private String mailFrom;
@@ -471,6 +474,28 @@ public class UserService implements IUserService {
 
             return new ApiResponse<>(ResponseCode.SUCCESS, new UserResponse(user));
         } catch (Exception e) {
+            throw new BusinessException(ResponseCode.FAILED);
+        }
+    }
+
+    @Override
+    public ApiResponse<ResponseCode> resetPassword(String email) {
+        try {
+            User user = userRepository.findByEmail(email).orElseThrow(
+                    () -> new BusinessException(ResponseCode.USER_NOT_FOUND)
+            );
+
+            String password = generateRandomPassword();
+            user.setPassword(passwordEncoder.encode(password));
+
+            userRepository.save(user);
+            mailService.sendUserForResetPassword(user, password);
+            return new ApiResponse<>(ResponseCode.SUCCESS, ResponseCode.RESET_PASSWORD);
+        } catch (BusinessException e) {
+            log.error("BusinessException: {}", e.getMessage(), e);
+            throw e;
+        } catch (Exception e) {
+            log.error("An unexpected error occurred: {}", e.getMessage(), e);
             throw new BusinessException(ResponseCode.FAILED);
         }
     }
